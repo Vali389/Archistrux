@@ -1,59 +1,34 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Building2, Paintbrush, Ruler, Award, Users, CheckCircle, ArrowRight } from "lucide-react";
+import { Building2, Award, Users, CheckCircle, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import SectionTitle from "@/components/SectionTitle";
-import ProcessSection from "@/components/ProcessSection";
+import ServiceCard from "@/components/ServiceCard";
 import TestimonialsSection from "@/components/TestimonialsSection";
-import EditorialCommitment from "@/components/EditorialCommitment";
-import VisualShowcaseBand from "@/components/VisualShowcaseBand";
 import heroHome from "@/assets/hero-home.jpg";
-import bedroom from "@/assets/bedroom.jpg";
-import livingroom from "@/assets/livingroom.jpg";
-import kitchen from "@/assets/kitchen.jpg";
-import bathroom from "@/assets/bathroom.jpg";
-import dining from "@/assets/dining.jpg";
-import project1 from "@/assets/project1.jpg";
-import project2 from "@/assets/project2.jpg";
-import project3 from "@/assets/project3.jpg";
+import { COMPANY, whatsappHref } from "@/data/company";
+import { getPopularServices } from "@/data/servicesContent";
+import { getProjectPreviewImages } from "@/data/projectGallery";
+import AnimatedCounter from "@/components/AnimatedCounter";
 
 const stats = [
-  { number: "500+", label: "Projects Completed" },
   { number: "15+", label: "Years Experience" },
-  { number: "200+", label: "Happy Clients" },
-  { number: "50+", label: "Expert Team" },
-];
-
-const services = [
-  { icon: Building2, title: "Construction", desc: "Residential & commercial construction with cutting-edge techniques and premium materials." },
-  { icon: Paintbrush, title: "Interior Design", desc: "Bespoke interior solutions that blend aesthetics with functionality for every space." },
-  { icon: Ruler, title: "Architecture", desc: "Innovative architectural designs that stand the test of time and inspire awe." },
-];
-
-const interiors = [
-  { img: bedroom, title: "Bedroom", desc: "Luxurious bedrooms designed for comfort and elegance" },
-  { img: livingroom, title: "Living Room", desc: "Sophisticated living spaces that make a statement" },
-  { img: kitchen, title: "Kitchen", desc: "Modern kitchens with premium finishes and smart layouts" },
-  { img: bathroom, title: "Bathroom", desc: "Spa-inspired bathrooms with exquisite detailing" },
-  { img: dining, title: "Dining", desc: "Elegant dining rooms for memorable gatherings" },
-];
-
-const projects = [
-  { img: project1, title: "Commercial Tower", location: "Hyderabad" },
-  { img: project2, title: "Luxury Villa", location: "Bangalore" },
-  { img: project3, title: "Corporate Office", location: "Mumbai" },
+  { number: "500+", label: "Projects Completed" },
+  { number: "100+", label: "Happy Clients" },
+  { number: "50+", label: "Team Members" },
 ];
 
 const whyUs = [
-  "Premium quality materials and craftsmanship",
-  "On-time project delivery guaranteed",
-  "Transparent pricing with no hidden costs",
-  "Dedicated project manager for every client",
-  "10-year structural warranty on all projects",
-  "Eco-friendly and sustainable building practices",
+  "Integrated design + execution with one accountable team",
+  "Transparent BOQs, schedules, and documented approvals",
+  "Rigorous quality checks at every milestone",
+  "Responsive communication and site discipline",
 ];
+
+const previewProjects = getProjectPreviewImages(6);
+const popularServices = getPopularServices();
 
 const Index = () => {
   return (
@@ -62,239 +37,211 @@ const Index = () => {
 
       <HeroSection
         image={heroHome}
-        title="Building Dreams Into Reality"
-        subtitle="We specialize in delivering high-quality construction, architectural design, and interior solutions for residential, commercial, and corporate spaces."
-        highlight="ArchiStrux Engineering & Interiors"
+        title="Building dreams into reality"
+        subtitle={`Prepared for ${COMPANY.legalName}. We combine design creativity with engineering precision—serving ${COMPANY.address} and beyond.`}
+        highlight="ArchiStrux"
+        tagline={COMPANY.tagline}
       />
 
-      {/* Stats Section */}
-      <section className="py-20 bg-secondary">
-        <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              viewport={{ once: true }}
-              className="text-center"
+      <section className="py-20 md:py-24 bg-secondary/40 border-y border-border/60">
+        <div className="max-w-7xl mx-auto px-4">
+          <SectionTitle
+            label="What we offer"
+            title="Popular services"
+            description="Most requested engagements—tap through for scope, deliverables, and how we protect quality."
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+            {popularServices.map((service, i) => (
+              <ServiceCard key={service.slug} service={service} index={i} />
+            ))}
+          </div>
+          <div className="text-center mt-10">
+            <Link
+              to="/services"
+              className="inline-flex items-center gap-2 text-primary hover:text-gold-light transition-colors font-body text-sm tracking-wider uppercase font-semibold"
             >
-              <span className="text-gold-gradient font-display text-4xl md:text-5xl font-bold">{stat.number}</span>
-              <p className="text-muted-foreground font-body text-xs md:text-sm mt-2 tracking-wider uppercase font-medium">
-                {stat.label}
-              </p>
-            </motion.div>
-          ))}
+              View all services <ArrowRight size={16} />
+            </Link>
+          </div>
+          <p className="text-center mt-8 text-sm text-muted-foreground">
+            Contact:{" "}
+            <a className="text-primary hover:underline" href={`tel:${COMPANY.phoneTel}`}>
+              {COMPANY.phoneDisplay}
+            </a>{" "}
+            ·{" "}
+            <a className="text-primary hover:underline" href={`mailto:${COMPANY.email}`}>
+              {COMPANY.email}
+            </a>
+          </p>
         </div>
       </section>
 
-      {/* Services Overview */}
-      <section className="py-24 bg-background">
+      <section className="py-20 md:py-24 bg-background">
         <div className="max-w-7xl mx-auto px-4">
           <SectionTitle
-            label="What We Do"
-            title="Our Core Services"
-            description="From concept to completion, we deliver excellence in every project we undertake."
+            label="Why choose us"
+            title="Experience you can measure"
+            description="Disciplined engineering, refined interiors, and transparent delivery—built for homeowners and businesses."
           />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {services.map((service, i) => (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
+            {stats.map((stat, i) => (
               <motion.div
-                key={service.title}
-                initial={{ opacity: 0, y: 30 }}
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.15 }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
                 viewport={{ once: true }}
-                className="group bg-card border border-border rounded-lg p-8 hover:border-primary/50 transition-all duration-500"
+                className="text-center"
               >
-                <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-                  <service.icon className="text-primary" size={28} />
-                </div>
-                <h3 className="font-display text-xl md:text-[22px] font-bold text-foreground mb-3 tracking-tight">
-                  {service.title}
-                </h3>
-                <p className="text-muted-foreground text-base md:text-[17px] leading-[1.6] font-normal">{service.desc}</p>
+                <AnimatedCounter
+                  value={stat.number}
+                  className="text-gold-gradient font-display text-4xl md:text-5xl font-bold tabular-nums"
+                />
+                <p className="text-muted-foreground font-body text-xs md:text-sm mt-2 tracking-wider uppercase font-medium">
+                  {stat.label}
+                </p>
               </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 md:py-24 bg-secondary/30">
+        <div className="max-w-7xl mx-auto px-4">
+          <SectionTitle
+            label="Portfolio"
+            title="Recent projects"
+            description="A snapshot of recent execution across interiors, coordination, and delivery."
+          />
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+            {previewProjects.map((project, i) => (
+              <Link
+                key={project.src}
+                to="/projects"
+                className="group relative overflow-hidden rounded-xl aspect-[4/3] border border-border/80 block"
+              >
+                <motion.div
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: i * 0.06 }}
+                  viewport={{ once: true }}
+                  className="h-full w-full"
+                >
+                  <img
+                    src={project.src}
+                    alt=""
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent opacity-70 group-hover:opacity-90 transition-opacity" />
+                  <span className="absolute bottom-3 left-3 text-xs font-semibold uppercase tracking-widest text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                    View gallery
+                  </span>
+                </motion.div>
+              </Link>
             ))}
           </div>
           <div className="text-center mt-12">
             <Link
-              to="/services"
-              className="inline-flex items-center gap-2 text-primary hover:text-gold-light transition-colors font-body text-sm tracking-wider uppercase"
+              to="/projects"
+              className="inline-flex items-center gap-2 text-primary hover:text-gold-light transition-colors font-body text-sm tracking-wider uppercase font-medium"
             >
-              View All Services <ArrowRight size={16} />
+              View portfolio <ArrowRight size={16} />
             </Link>
-          </div>
-        </div>
-      </section>
-
-      <ProcessSection />
-
-      {/* Interior Design Showcase */}
-      <section className="py-24 bg-secondary">
-        <div className="max-w-7xl mx-auto px-4">
-          <SectionTitle
-            label="Interior Solutions"
-            title="Spaces We Transform"
-            description="Every room tells a story. We design interiors that reflect your personality and lifestyle."
-          />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {interiors.map((item, i) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                viewport={{ once: true }}
-                className={`group relative overflow-hidden rounded-lg cursor-pointer ${
-                  i === 0 ? "sm:col-span-2 lg:col-span-2 h-80" : "h-72"
-                }`}
-              >
-                <img
-                  src={item.img}
-                  alt={item.title}
-                  loading="lazy"
-                  width={800}
-                  height={600}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="font-display text-xl md:text-[22px] font-bold text-foreground mb-1 tracking-tight">
-                    {item.title}
-                  </h3>
-                  <p className="text-muted-foreground text-base leading-[1.5] opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    {item.desc}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Projects */}
-      <section className="py-24 bg-background">
-        <div className="max-w-7xl mx-auto px-4">
-          <SectionTitle
-            label="Portfolio"
-            title="Featured Projects"
-            description="A glimpse into our portfolio of landmark constructions and stunning interiors."
-          />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {projects.map((project, i) => (
-              <motion.div
-                key={project.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.15 }}
-                viewport={{ once: true }}
-                className="group relative overflow-hidden rounded-lg h-96"
-              >
-                <img
-                  src={project.img}
-                  alt={project.title}
-                  loading="lazy"
-                  width={800}
-                  height={600}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <span className="text-primary text-xs tracking-widest uppercase">{project.location}</span>
-                  <h3 className="font-display text-xl md:text-[22px] font-bold text-foreground mt-1 tracking-tight">
-                    {project.title}
-                  </h3>
-                </div>
-              </motion.div>
-            ))}
           </div>
         </div>
       </section>
 
       <TestimonialsSection />
 
-      <EditorialCommitment />
-
-      <VisualShowcaseBand />
-
-      {/* Why Choose Us */}
-      <section className="py-24 bg-secondary">
+      <section className="py-20 md:py-24 bg-background border-t border-border/60">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
             <div>
               <SectionTitle
                 label="Why ArchiStrux"
-                title="Why Choose Us"
+                title="Built for clarity & craft"
+                description=""
               />
-              <div className="grid grid-cols-1 gap-4 mt-8">
+              <div className="grid grid-cols-1 gap-4 mt-4 max-w-xl mx-auto lg:mx-0 lg:max-w-none">
                 {whyUs.map((item, i) => (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, x: -16 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.4, delay: i * 0.1 }}
+                    transition={{ duration: 0.4, delay: i * 0.06 }}
                     viewport={{ once: true }}
-                    className="flex items-center gap-3"
+                    className="flex items-start gap-3"
                   >
-                    <CheckCircle size={18} className="text-primary shrink-0" />
+                    <CheckCircle size={18} className="text-primary shrink-0 mt-0.5" />
                     <span className="text-foreground/85 font-body text-base md:text-[17px] leading-[1.6]">{item}</span>
                   </motion.div>
                 ))}
               </div>
             </div>
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="grid grid-cols-2 gap-6"
+              className="grid grid-cols-2 gap-5"
             >
-              <div className="bg-card border border-border rounded-lg p-6 text-center">
+              <div className="bg-card border border-border rounded-xl p-6 text-center">
                 <Award className="text-primary mx-auto mb-3" size={32} />
                 <span className="text-gold-gradient font-display text-2xl font-bold block">ISO</span>
-                <span className="text-muted-foreground text-xs">Certified Company</span>
+                <span className="text-muted-foreground text-xs">Quality systems</span>
               </div>
-              <div className="bg-card border border-border rounded-lg p-6 text-center">
+              <div className="bg-card border border-border rounded-xl p-6 text-center">
                 <Users className="text-primary mx-auto mb-3" size={32} />
-                <span className="text-gold-gradient font-display text-2xl font-bold block">200+</span>
-                <span className="text-muted-foreground text-xs">Happy Clients</span>
+                <span className="text-gold-gradient font-display text-2xl font-bold block">100+</span>
+                <span className="text-muted-foreground text-xs">Happy clients</span>
               </div>
-              <div className="bg-card border border-border rounded-lg p-6 text-center col-span-2">
+              <div className="bg-card border border-border rounded-xl p-6 text-center col-span-2">
                 <Building2 className="text-primary mx-auto mb-3" size={32} />
                 <span className="text-gold-gradient font-display text-2xl font-bold block">500+</span>
-                <span className="text-muted-foreground text-xs">Projects Delivered</span>
+                <span className="text-muted-foreground text-xs">Projects delivered</span>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 bg-background relative overflow-hidden">
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,hsl(43_72%_55%)_0%,transparent_70%)]" />
-        </div>
-        <div className="relative z-10 max-w-3xl mx-auto px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="font-display text-2xl md:text-[1.75rem] font-bold mb-5 tracking-tight">
-              <span className="text-gold-gradient">Ready to build your dream?</span>
-            </h2>
-            <p className="text-muted-foreground font-body text-base md:text-[17px] leading-[1.6] mb-8 max-w-xl mx-auto">
-              Let's discuss your project. Our team of experts is ready to turn your vision into reality.
-            </p>
+      <section className="py-20 md:py-24 bg-primary text-primary-foreground relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 opacity-25 bg-[radial-gradient(circle_at_70%_30%,white,transparent_50%)]" />
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="relative z-10 max-w-4xl mx-auto px-4 text-center"
+        >
+          <h2 className="font-display text-2xl md:text-[1.85rem] font-bold tracking-tight mb-4">
+            Ready to start your project?
+          </h2>
+          <p className="text-primary-foreground/90 text-base md:text-[17px] leading-[1.6] mb-10 max-w-2xl mx-auto">
+            Book a consultation, call us directly, or message on WhatsApp—we’ll respond with clear next steps.
+          </p>
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4">
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 bg-gold-gradient text-primary-foreground font-body text-sm tracking-wider uppercase px-8 py-4 rounded-lg hover:opacity-90 transition-opacity"
+              className="inline-flex items-center justify-center rounded-lg bg-background px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-foreground shadow-lg hover:opacity-95 transition-opacity"
             >
-              Get In Touch <ArrowRight size={16} />
+              Get a free consultation
             </Link>
-          </motion.div>
-        </div>
+            <a
+              href={`tel:${COMPANY.phoneTel}`}
+              className="inline-flex items-center justify-center rounded-lg border-2 border-primary-foreground/35 px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
+            >
+              Call: {COMPANY.phoneDisplay}
+            </a>
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-lg border-2 border-primary-foreground/35 px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
+            >
+              WhatsApp now
+            </a>
+          </div>
+        </motion.div>
       </section>
 
       <Footer />

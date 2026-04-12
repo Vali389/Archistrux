@@ -5,21 +5,38 @@ import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import SectionTitle from "@/components/SectionTitle";
 import heroAbout from "@/assets/hero-about.jpg";
+import { COMPANY } from "@/data/company";
 
 const values = [
-  { icon: Target, title: "Our Mission", desc: "To deliver innovative construction and design solutions that exceed client expectations, creating spaces that inspire and endure for generations." },
-  { icon: Eye, title: "Our Vision", desc: "To become India's most trusted name in construction and interior design, recognized for quality, innovation, and client-centric approach." },
-  { icon: Heart, title: "Our Values", desc: "Integrity, excellence, innovation, and sustainability guide everything we do. We believe in building not just structures, but lasting relationships." },
-  { icon: Award, title: "Our Promise", desc: "Every project receives our complete dedication. We promise quality craftsmanship, transparent communication, and timely delivery on every engagement." },
+  {
+    icon: Target,
+    title: "Mission",
+    desc: "Deliver engineering-led interiors and project delivery that exceed expectations on quality, transparency, and schedule—without compromising safety or compliance.",
+  },
+  {
+    icon: Eye,
+    title: "Vision",
+    desc: "Be a trusted partner for homeowners and businesses across Hyderabad and beyond—known for disciplined execution, refined detailing, and accountable communication.",
+  },
+  {
+    icon: Heart,
+    title: "Values",
+    desc: "Integrity in estimates, clarity in documentation, and respect for your time and investment. We build relationships as carefully as we build spaces.",
+  },
+  {
+    icon: Award,
+    title: "Promise",
+    desc: "Dedicated oversight on every engagement: structured milestones, visible progress, and a handover you can verify—not guess.",
+  },
 ];
 
 const timeline = [
-  { year: "2010", title: "Company Founded", desc: "ArchiStrux was established with a vision to redefine construction quality in India." },
-  { year: "2013", title: "100th Project", desc: "Reached a milestone of 100 completed residential and commercial projects." },
-  { year: "2016", title: "Interior Division", desc: "Launched our dedicated interior design division to offer end-to-end solutions." },
-  { year: "2019", title: "Corporate Expansion", desc: "Expanded into corporate office design and large-scale commercial construction." },
-  { year: "2022", title: "500+ Projects", desc: "Crossed 500 successfully delivered projects across India." },
-  { year: "2026", title: "Industry Leader", desc: "Recognized as one of the top construction and interior firms in the region." },
+  { year: "2010", title: "Founded", desc: "ArchiStrux established with a focus on build quality and client-first delivery." },
+  { year: "2013", title: "100 projects", desc: "Milestone across residential and commercial work—repeat clients and referrals." },
+  { year: "2016", title: "Interiors division", desc: "End-to-end interiors aligned with civil and MEP coordination." },
+  { year: "2019", title: "Corporate scale", desc: "Larger office and commercial interiors with documented QA processes." },
+  { year: "2022", title: "500+ deliveries", desc: "Portfolio growth across Telangana and neighbouring markets." },
+  { year: "2026", title: "Today", desc: "Full stack: interiors, PM, drafting, testing, and valuation under one roof." },
 ];
 
 const About = () => {
@@ -30,96 +47,74 @@ const About = () => {
       <HeroSection
         image={heroAbout}
         title="About ArchiStrux"
-        subtitle="With over 15 years of experience, we've built a reputation for excellence in construction, architecture, and interior design."
-        highlight="Our Story"
+        subtitle={`${COMPANY.legalName} — engineering precision and interior craft, based in ${COMPANY.address}.`}
+        highlight="Our story"
       />
 
-      {/* About Content */}
-      <section className="py-24 bg-background">
+      <section className="py-16 md:py-24 bg-background border-b border-border/50">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <span className="text-primary font-body text-sm tracking-[0.3em] uppercase">Who We Are</span>
-              <h2 className="font-display text-3xl md:text-4xl font-bold mt-3 mb-6">
-                <span className="text-gold-gradient">Crafting Excellence Since 2010</span>
-              </h2>
-              <p className="text-foreground/70 font-body leading-relaxed mb-4">
-                ArchiStrux Engineering & Interiors Pvt. Ltd. is a premier construction and interior design company based in India. We specialize in delivering high-quality construction, architectural design, and interior solutions for residential, commercial, and corporate spaces.
+          <div className="max-w-3xl mb-14 md:mb-16">
+            <p className="text-primary text-xs font-bold uppercase tracking-[0.22em] mb-4">Who we are</p>
+            <h2 className="font-display text-2xl md:text-[1.85rem] font-bold text-foreground tracking-tight mb-6 leading-tight">
+              Crafting spaces with clarity and rigor
+            </h2>
+            <div className="space-y-5 text-base md:text-[17px] leading-[1.7] text-foreground/85">
+              <p>
+                {COMPANY.legalName} provides construction-adjacent engineering support, interior design, project management,
+                technical drafting, material testing insight, and property valuation—so clients can move from idea to occupancy
+                with fewer surprises.
               </p>
-              <p className="text-foreground/70 font-body leading-relaxed mb-4">
-                Our focus is on modern design, durability, and client satisfaction — turning your vision into reality with precision and professionalism. Every project we undertake reflects our commitment to excellence and innovation.
+              <p>
+                Our team brings together site discipline, design sensitivity, and documentation habits that matter when budgets
+                are tight and timelines are real. Whether it is a home refresh, a workplace rollout, or a technical assessment,
+                we anchor decisions in scope you can see and approve.
               </p>
-              <p className="text-foreground/70 font-body leading-relaxed">
-                With a team of 50+ skilled architects, engineers, and designers, we bring together diverse expertise to deliver projects that set new benchmarks in quality and design.
-              </p>
-            </motion.div>
-
-            <div className="grid grid-cols-2 gap-6">
-              {values.map((value, i) => (
-                <motion.div
-                  key={value.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  viewport={{ once: true }}
-                  className="bg-card border border-border rounded-lg p-6"
-                >
-                  <value.icon className="text-primary mb-3" size={24} />
-                  <h4 className="font-display text-foreground text-sm font-semibold mb-2">{value.title}</h4>
-                  <p className="text-muted-foreground text-xs leading-relaxed">{value.desc}</p>
-                </motion.div>
-              ))}
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
+            {values.map((value, i) => (
+              <motion.div
+                key={value.title}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: i * 0.06 }}
+                viewport={{ once: true }}
+                className="rounded-2xl border border-border/80 bg-secondary/40 p-7 md:p-8 hover:border-primary/25 transition-colors"
+              >
+                <value.icon className="text-primary mb-4" size={26} strokeWidth={1.75} />
+                <h3 className="font-display text-lg md:text-xl font-bold text-foreground tracking-tight mb-3">{value.title}</h3>
+                <p className="text-muted-foreground text-sm md:text-[15px] leading-[1.65]">{value.desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Timeline */}
-      <section className="py-24 bg-secondary">
-        <div className="max-w-4xl mx-auto px-4">
+      <section className="py-16 md:py-24 bg-secondary/30">
+        <div className="max-w-3xl mx-auto px-4">
           <SectionTitle
-            label="Our Journey"
+            label="Timeline"
             title="Milestones"
-            description="A look at the key moments that shaped ArchiStrux into what it is today."
+            description="Key moments in our journey—consistency in delivery matters more than headlines."
           />
-          <div className="relative">
-            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-border" />
+          <ul className="relative mt-12 md:mt-14 space-y-0 border-l-2 border-border pl-8 md:pl-10 ml-2 md:ml-3">
             {timeline.map((item, i) => (
-              <motion.div
+              <motion.li
                 key={item.year}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
+                initial={{ opacity: 0, x: -8 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className={`relative flex items-start gap-8 mb-12 ${
-                  i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                }`}
+                transition={{ delay: i * 0.05 }}
+                className="relative pb-12 last:pb-0"
               >
-                <div className={`flex-1 ${i % 2 === 0 ? "md:text-right" : "md:text-left"} hidden md:block`}>
-                  <div className="bg-card border border-border rounded-lg p-6">
-                    <h4 className="font-display text-foreground font-semibold mb-1">{item.title}</h4>
-                    <p className="text-muted-foreground text-sm">{item.desc}</p>
-                  </div>
-                </div>
-                <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-primary/20 border-2 border-primary flex items-center justify-center z-10">
-                  <span className="text-primary text-[10px] font-bold">{item.year.slice(2)}</span>
-                </div>
-                <div className="flex-1 ml-12 md:ml-0">
-                  <div className="bg-card border border-border rounded-lg p-6 md:hidden">
-                    <span className="text-primary text-xs font-bold">{item.year}</span>
-                    <h4 className="font-display text-foreground font-semibold mb-1">{item.title}</h4>
-                    <p className="text-muted-foreground text-sm">{item.desc}</p>
-                  </div>
-                  <span className="text-primary text-xs font-bold hidden md:block">{item.year}</span>
-                </div>
-              </motion.div>
+                <span className="absolute -left-[25px] md:-left-[29px] top-1.5 flex h-4 w-4 rounded-full border-2 border-primary bg-background" />
+                <span className="text-primary text-sm font-bold tabular-nums">{item.year}</span>
+                <h4 className="font-display text-base md:text-lg font-bold text-foreground mt-1 mb-2">{item.title}</h4>
+                <p className="text-muted-foreground text-sm md:text-[15px] leading-relaxed">{item.desc}</p>
+              </motion.li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 

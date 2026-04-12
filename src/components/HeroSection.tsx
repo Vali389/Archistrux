@@ -5,9 +5,11 @@ interface HeroSectionProps {
   title: string;
   subtitle: string;
   highlight?: string;
+  /** Italic tagline shown under the subtitle (e.g. “Build your vision with us”) */
+  tagline?: string;
 }
 
-const HeroSection = ({ image, title, subtitle, highlight }: HeroSectionProps) => {
+const HeroSection = ({ image, title, subtitle, highlight, tagline }: HeroSectionProps) => {
   return (
     <section className="relative h-screen w-full overflow-hidden">
       <div className="absolute inset-0">
@@ -50,10 +52,20 @@ const HeroSection = ({ image, title, subtitle, highlight }: HeroSectionProps) =>
           >
             {subtitle}
           </motion.p>
+          {tagline && (
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.72 }}
+              className="mt-8 text-xl sm:text-2xl md:text-3xl font-semibold italic text-primary max-w-3xl mx-auto leading-snug"
+            >
+              {tagline}
+            </motion.p>
+          )}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
+            transition={{ duration: 0.8, delay: tagline ? 0.88 : 0.8 }}
             className="mt-8"
           >
             <div className="w-20 h-0.5 bg-gold-gradient mx-auto" />

@@ -8,8 +8,14 @@ const navLinks = [
   { name: "Home", path: "/" },
   { name: "About", path: "/about" },
   { name: "Services", path: "/services" },
+  { name: "Projects", path: "/projects" },
   { name: "Contact", path: "/contact" },
 ];
+
+const isPathActive = (pathname: string, path: string) => {
+  if (path === "/") return pathname === "/";
+  return pathname === path || pathname.startsWith(`${path}/`);
+};
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,38 +36,28 @@ const Navbar = () => {
               <span className="text-gold-gradient font-display text-base md:text-lg font-bold leading-tight block tracking-tight">
                 ArchiStrux
               </span>
-              <span className="text-muted-foreground text-xs tracking-widest uppercase">
-                Engineering & Interiors
-              </span>
+              <span className="text-muted-foreground text-xs tracking-widest uppercase">Engineering & Interiors</span>
             </div>
           </Link>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-7">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 className={`relative font-body text-sm tracking-wider uppercase transition-colors duration-300 ${
-                  location.pathname === link.path
-                    ? "text-primary"
-                    : "text-foreground/70 hover:text-primary"
+                  isPathActive(location.pathname, link.path) ? "text-primary" : "text-foreground/70 hover:text-primary"
                 }`}
               >
                 {link.name}
-                {location.pathname === link.path && (
-                  <motion.div
-                    layoutId="navbar-indicator"
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gold-gradient"
-                  />
+                {isPathActive(location.pathname, link.path) && (
+                  <motion.div layoutId="navbar-indicator" className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gold-gradient" />
                 )}
               </Link>
             ))}
           </div>
 
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-primary p-2"
-          >
+          <button type="button" onClick={() => setIsOpen(!isOpen)} className="md:hidden text-primary p-2" aria-label="Menu">
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
@@ -82,9 +78,7 @@ const Navbar = () => {
                   to={link.path}
                   onClick={() => setIsOpen(false)}
                   className={`font-body text-sm tracking-wider uppercase py-2 ${
-                    location.pathname === link.path
-                      ? "text-primary"
-                      : "text-foreground/70"
+                    isPathActive(location.pathname, link.path) ? "text-primary" : "text-foreground/70"
                   }`}
                 >
                   {link.name}

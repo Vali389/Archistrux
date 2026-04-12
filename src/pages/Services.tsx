@@ -1,32 +1,15 @@
 import { motion } from "framer-motion";
-import { Building2, Paintbrush, Ruler, HardHat, Home, Warehouse, Wrench, Lightbulb } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight, ClipboardList, FileText, MessageCircle, Wrench } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
-import SectionTitle from "@/components/SectionTitle";
+import { cn } from "@/lib/utils";
 import heroServices from "@/assets/hero-services.jpg";
-import bedroom from "@/assets/bedroom.jpg";
-import livingroom from "@/assets/livingroom.jpg";
-import kitchen from "@/assets/kitchen.jpg";
-import bathroom from "@/assets/bathroom.jpg";
-import dining from "@/assets/dining.jpg";
+import { COMPANY, whatsappHref } from "@/data/company";
+import { servicesList } from "@/data/servicesContent";
 
-const mainServices = [
-  { icon: Building2, title: "Commercial Construction", desc: "From office complexes to retail spaces, we deliver commercial projects that combine functionality with modern aesthetics. Our team ensures compliance with all building codes while creating spaces that drive business success.", features: ["Office Buildings", "Retail Spaces", "Industrial Units", "Warehouses"] },
-  { icon: Home, title: "Residential Construction", desc: "We build dream homes that reflect your lifestyle. From luxury villas to modern apartments, our residential construction services cover design, planning, and execution with meticulous attention to detail.", features: ["Luxury Villas", "Apartments", "Independent Houses", "Farmhouses"] },
-  { icon: Paintbrush, title: "Interior Design", desc: "Our interior design team creates stunning spaces that blend beauty with functionality. We specialize in bedrooms, living rooms, kitchens, bathrooms, and dining areas with bespoke designs.", features: ["Residential Interiors", "Commercial Interiors", "Modular Kitchens", "Custom Furniture"] },
-  { icon: Ruler, title: "Architectural Design", desc: "Innovative architectural solutions that balance aesthetics, functionality, and sustainability. Our architects create designs that stand out while meeting all structural requirements.", features: ["3D Visualization", "Floor Plans", "Elevation Design", "Landscape Architecture"] },
-  { icon: Wrench, title: "Renovation & Remodeling", desc: "Transform your existing space with our comprehensive renovation services. Whether it's a single room refresh or a complete home makeover, we deliver results that exceed expectations.", features: ["Home Renovation", "Office Remodeling", "Kitchen Upgrades", "Bathroom Refit"] },
-  { icon: Lightbulb, title: "MEP Engineering", desc: "Complete mechanical, electrical, and plumbing engineering services that ensure your building operates efficiently and safely with modern systems integration.", features: ["Electrical Systems", "Plumbing", "HVAC Solutions", "Fire Safety"] },
-];
-
-const interiorShowcase = [
-  { img: bedroom, title: "Bedroom Design", desc: "Create your personal sanctuary with our luxury bedroom designs featuring premium materials, custom wardrobes, ambient lighting, and ergonomic layouts." },
-  { img: livingroom, title: "Living Room Design", desc: "Make a lasting impression with sophisticated living rooms that feature contemporary furniture, smart entertainment systems, and elegant decor." },
-  { img: kitchen, title: "Kitchen Design", desc: "Modern modular kitchens with premium finishes, smart storage solutions, marble countertops, and state-of-the-art appliances." },
-  { img: bathroom, title: "Bathroom Design", desc: "Spa-inspired bathrooms with luxury fittings, premium tiles, rain showers, freestanding bathtubs, and mood lighting." },
-  { img: dining, title: "Dining Room Design", desc: "Elegant dining spaces designed for memorable gatherings, featuring custom tables, statement chandeliers, and refined aesthetics." },
-];
+const processIcons = [MessageCircle, FileText, Wrench, ClipboardList];
 
 const Services = () => {
   return (
@@ -35,111 +18,156 @@ const Services = () => {
 
       <HeroSection
         image={heroServices}
-        title="Construction, design & interiors—under one roof"
-        subtitle="From civil works and architecture to turnkey interiors and MEP, we deliver end-to-end execution with clear scope, documented milestones, and quality you can walk through at every site visit."
-        highlight="Services"
+        title="Our services"
+        subtitle="At ArchiStrux Engineering & Interiors Pvt. Ltd., we combine design creativity with engineering precision. From concept to completion—functional, reliable, and value-driven delivery across Hyderabad and beyond."
+        highlight="What we do"
       />
 
-      {/* Main Services */}
-      <section className="py-24 bg-background">
+      {/* Intro strip */}
+      <section className="border-b border-border/60 bg-gradient-to-b from-secondary/30 to-background">
+        <div className="max-w-3xl mx-auto px-4 py-12 md:py-14 text-center">
+          <p className="text-base md:text-[17px] leading-[1.7] text-foreground/85">
+            Explore each line of service below—interiors, project management, drafting, testing, and valuation. Select any card to
+            open the full scope, imagery, and methodology.
+          </p>
+        </div>
+      </section>
+
+      {/* Alternating feature rows */}
+      <section className="py-4 md:py-6">
+        {servicesList.map((service, index) => {
+          const Icon = service.icon;
+          const imageLeft = index % 2 === 0;
+          return (
+            <motion.article
+              key={service.slug}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.45 }}
+              className={cn("border-b border-border/50", index === 0 ? "pt-10 md:pt-14" : "py-14 md:py-20")}
+            >
+              <div className="max-w-7xl mx-auto px-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden rounded-2xl border border-border/80 bg-card/40 shadow-xl shadow-black/15">
+                  <div className={cn("relative min-h-[260px] lg:min-h-[380px]", !imageLeft && "lg:order-2")}>
+                    <img
+                      src={service.heroImage}
+                      alt=""
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-background/30 lg:to-background/85" />
+                    <div className="absolute bottom-4 left-4 right-4 lg:hidden">
+                      <span className="inline-flex items-center gap-2 rounded-lg bg-background/80 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-primary backdrop-blur-sm">
+                        <Icon className="h-4 w-4" />
+                        {service.title}
+                      </span>
+                    </div>
+                  </div>
+                  <div className={cn("flex flex-col justify-center p-8 md:p-12 lg:p-14", !imageLeft && "lg:order-1")}>
+                    <div className="hidden lg:flex items-center gap-3 mb-5">
+                      <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15 text-primary ring-1 ring-primary/25">
+                        <Icon className="h-6 w-6" strokeWidth={1.75} />
+                      </span>
+                      <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Service</span>
+                    </div>
+                    <h2 className="font-display text-2xl md:text-[1.85rem] font-bold text-foreground tracking-tight mb-2">
+                      {service.title}
+                    </h2>
+                    <p className="text-primary font-medium italic text-base md:text-lg mb-5 border-l-2 border-primary/50 pl-4">
+                      {service.tagline}
+                    </p>
+                    <p className="text-muted-foreground text-base md:text-[17px] leading-[1.7] mb-8">{service.summary}</p>
+                    <Link
+                      to={`/services/${service.slug}`}
+                      className="inline-flex w-fit items-center gap-2 rounded-lg bg-gold-gradient px-6 py-3.5 text-sm font-semibold uppercase tracking-wider text-primary-foreground shadow-lg hover:opacity-92 transition-opacity"
+                    >
+                      View full details
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </motion.article>
+          );
+        })}
+      </section>
+
+      {/* Process — horizontal */}
+      <section className="py-16 md:py-20 bg-secondary/35 border-y border-border/60">
         <div className="max-w-7xl mx-auto px-4">
-          <SectionTitle
-            label="Services"
-            title="What We Offer"
-            description="End-to-end solutions for all your construction and design needs."
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {mainServices.map((service, i) => (
-              <motion.div
-                key={service.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                viewport={{ once: true }}
-                className="group bg-card border border-border rounded-lg p-8 hover:border-primary/50 transition-all duration-500"
-              >
-                <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-                  <service.icon className="text-primary" size={28} />
-                </div>
-                <h3 className="font-display text-xl text-foreground mb-3">{service.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-4">{service.desc}</p>
-                <div className="flex flex-wrap gap-2">
-                  {service.features.map((f) => (
-                    <span key={f} className="text-xs text-primary border border-primary/30 rounded-full px-3 py-1">
-                      {f}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
+          <div className="text-center max-w-2xl mx-auto mb-12 md:mb-14">
+            <p className="text-primary text-xs font-bold uppercase tracking-[0.25em] mb-3">How we work</p>
+            <h2 className="text-2xl md:text-[1.85rem] font-bold text-foreground tracking-tight mb-3">From first call to handover</h2>
+            <p className="text-muted-foreground text-base md:text-[17px] leading-relaxed">
+              One accountable team—clear milestones, documented approvals, and transparent communication.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {["Consultation", "Design & planning", "Execution", "Handover"].map((label, i) => {
+              const PIcon = processIcons[i] ?? ClipboardList;
+              return (
+                <motion.div
+                  key={label}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.07 }}
+                  className="relative rounded-2xl border border-border/90 bg-card/70 p-6 text-center hover:border-primary/35 transition-colors"
+                >
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary/12 text-primary">
+                    <PIcon className="h-6 w-6" strokeWidth={1.5} />
+                  </div>
+                  <p className="text-xs font-bold text-primary mb-2">{String(i + 1).padStart(2, "0")}</p>
+                  <h3 className="font-bold text-foreground text-[15px] md:text-base mb-2">{label}</h3>
+                  <p className="text-muted-foreground text-xs md:text-sm leading-relaxed">
+                    {i === 0 && "Scope, budget band, and success criteria—aligned before we commit dates."}
+                    {i === 1 && "Drawings, BOQ, and sign-off packs so site starts without ambiguity."}
+                    {i === 2 && "Supervision, QA checks, and snag closure against the approved baseline."}
+                    {i === 3 && "Documentation, training if needed, and warranty handover with clarity."}
+                  </p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Interior Showcase */}
-      <section className="py-24 bg-secondary">
-        <div className="max-w-7xl mx-auto px-4">
-          <SectionTitle
-            label="Interior Design"
-            title="Spaces We Design"
-            description="Every room is an opportunity to create something extraordinary."
-          />
-          <div className="space-y-16">
-            {interiorShowcase.map((item, i) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-                className={`flex flex-col ${i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} gap-8 items-center`}
-              >
-                <div className="flex-1 overflow-hidden rounded-lg">
-                  <img
-                    src={item.img}
-                    alt={item.title}
-                    loading="lazy"
-                    width={800}
-                    height={600}
-                    className="w-full h-72 lg:h-96 object-cover hover:scale-105 transition-transform duration-700"
-                  />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-display text-2xl md:text-3xl font-bold mb-4">
-                    <span className="text-gold-gradient">{item.title}</span>
-                  </h3>
-                  <p className="text-foreground/70 font-body leading-relaxed">{item.desc}</p>
-                  <div className="w-16 h-0.5 bg-gold-gradient mt-6" />
-                </div>
-              </motion.div>
-            ))}
+      <section className="py-16 md:py-20 bg-primary text-primary-foreground relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 opacity-25 bg-[radial-gradient(ellipse_at_top,_white,_transparent_55%)]" />
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="relative z-10 max-w-3xl mx-auto px-4 text-center"
+        >
+          <h2 className="text-2xl md:text-[1.9rem] font-bold tracking-tight mb-4">Looking for expert solutions?</h2>
+          <p className="text-primary-foreground/90 text-base md:text-[17px] leading-[1.65] mb-10">
+            Whether you need design, execution, or technical evaluation, {COMPANY.shortName} is your partner for reliable,
+            professional delivery.
+          </p>
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4">
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center rounded-xl bg-background px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-foreground shadow-lg hover:opacity-95 transition-opacity"
+            >
+              Get free consultation
+            </Link>
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center rounded-xl border-2 border-primary-foreground/35 px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
+            >
+              Contact us
+            </Link>
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-xl border-2 border-primary-foreground/35 px-8 py-3.5 text-sm font-semibold uppercase tracking-wider text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
+            >
+              WhatsApp now
+            </a>
           </div>
-        </div>
-      </section>
-
-      {/* Process */}
-      <section className="py-24 bg-background">
-        <div className="max-w-7xl mx-auto px-4">
-          <SectionTitle label="How We Work" title="Our Process" description="A streamlined approach that ensures quality and satisfaction at every step." />
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {["Consultation", "Design & Planning", "Execution", "Handover"].map((step, i) => (
-              <motion.div
-                key={step}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.15 }}
-                viewport={{ once: true }}
-                className="text-center"
-              >
-                <div className="w-16 h-16 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center mx-auto mb-4">
-                  <span className="text-primary font-display text-xl font-bold">{String(i + 1).padStart(2, "0")}</span>
-                </div>
-                <h4 className="font-display text-foreground font-semibold mb-2">{step}</h4>
-                <p className="text-muted-foreground text-sm">Professional and systematic approach ensuring quality results.</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+        </motion.div>
       </section>
 
       <Footer />

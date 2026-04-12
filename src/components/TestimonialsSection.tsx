@@ -14,7 +14,7 @@ const testimonials = [
     name: "Rajesh Kumar",
     role: "Commercial Client, Bangalore",
     quote:
-      "Professional site management and clear communication. Our office build exceeded expectations on quality and finishing. We would engage them again without hesitation.",
+      "Archistrux transformed our office space beyond expectations—disciplined coordination, crisp documentation, and finishing that holds up in daily use.",
     rating: 5,
   },
   {
@@ -57,9 +57,9 @@ const TestimonialsSection = () => {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4">
         <SectionTitle
-          label="Client Stories"
-          title="What Our Clients Say"
-          description="Trusted by homeowners and businesses for construction, architecture, and interior projects across India."
+          label="Client stories"
+          title="Client testimonials"
+          description="Trusted by homeowners and businesses for interiors, project management, and technical services."
         />
 
         <motion.div
