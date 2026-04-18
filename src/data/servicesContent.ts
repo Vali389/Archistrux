@@ -1,10 +1,11 @@
 import type { LucideIcon } from "lucide-react";
-import { ClipboardList, FlaskConical, Home, Palette, Ruler } from "lucide-react";
+import { ClipboardList, FlaskConical, Home, Layers, Palette, Ruler } from "lucide-react";
 
 export type ServiceSlug =
   | "interior-designing"
   | "project-management"
   | "design-drafting"
+  | "revit"
   | "material-testing"
   | "property-valuation";
 
@@ -38,7 +39,7 @@ export const POPULAR_SERVICE_SLUGS: ServiceSlug[] = [
   "interior-designing",
   "project-management",
   "design-drafting",
-  "material-testing",
+  "revit",
 ];
 
 export const servicesList: ServiceDefinition[] = [
@@ -177,6 +178,48 @@ export const servicesList: ServiceDefinition[] = [
     icon: Ruler,
     processSteps: ["Survey & brief", "Drafting", "Review & coordination", "Issue GFC", "As-built support"],
     atAGlance: ["AutoCAD / GFC-ready sets", "Layered, revision-tracked files", "2D–3D coordination"],
+  },
+  {
+    slug: "revit",
+    title: "Revit & BIM Modeling",
+    summary: "Parametric Revit models, sheets, and coordinated BIM deliverables for design and site teams.",
+    tagline: "Coordinated Models from Concept to Construction",
+    description:
+      "We build and maintain intelligent Revit models that align architecture, interiors, and coordination needs. Deliverables are structured for clarity—views, sheets, and schedules that contractors and consultants can rely on during execution.",
+    additionalContent: [
+      "BIM is most valuable when the model stays disciplined: shared coordinates, consistent families, and revision history that everyone can trace. We organize templates, view templates, and sheet sets so approvals and site queries move faster—with fewer ambiguous redraws.",
+      "Where projects require interior-heavy scopes, we model finishes, ceilings, and joinery with LOD appropriate to procurement and site marking—keeping 2D exports and 3D coordination traceable to the same source of truth.",
+    ],
+    whatWeOffer: [
+      {
+        title: "Architectural & interior Revit modeling",
+        description: "Walls, levels, rooms, ceilings, and interior build-ups modeled for coordination.",
+      },
+      {
+        title: "Working drawings from the model",
+        description: "Plans, elevations, sections, and details issued from consistent views and revision control.",
+      },
+      {
+        title: "Schedules & quantification support",
+        description: "Door/window/finish schedules and tagged elements to support BOQ alignment.",
+      },
+      {
+        title: "Coordination-ready exports",
+        description: "Navis-friendly handoffs or PDF/DWG packages aligned to your project workflow.",
+      },
+    ],
+    whyItMatters:
+      "A coordinated Revit model reduces clashes, speeds up approvals, and gives your site team a single reliable reference through construction.",
+    heroImage:
+      "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=2000&q=85",
+    galleryImages: [
+      "https://images.unsplash.com/photo-1487958449943-2427e8be8625?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1581092160607-ee22621ddc91?auto=format&fit=crop&w=1200&q=85",
+      "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=85",
+    ],
+    icon: Layers,
+    processSteps: ["Template & standards", "Model build", "Documentation", "Review & issue", "Site support"],
+    atAGlance: ["Disciplined Revit standards", "Model-led sheets & schedules", "Coordination-ready outputs"],
   },
   {
     slug: "material-testing",

@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronUp } from "lucide-react";
 import { whatsappHref } from "@/data/company";
 
 function WhatsAppIcon({ className }: { className?: string }) {
@@ -40,9 +39,11 @@ const FloatingQuickActions = () => {
             transition={{ type: "spring", stiffness: 400, damping: 28 }}
             onClick={scrollTop}
             title="Back to top"
-            className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-primary/60 bg-zinc-950/95 text-amber-400 shadow-xl shadow-black/40 ring-2 ring-amber-500/30 backdrop-blur-sm hover:bg-zinc-900 hover:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-amber-500 bg-zinc-950 text-amber-400 shadow-[0_0_14px_rgba(251,146,60,0.22)] ring-2 ring-amber-500/30 backdrop-blur-sm hover:bg-zinc-900 hover:border-amber-400 hover:shadow-[0_0_18px_rgba(251,146,60,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
           >
-            <ChevronUp className="h-6 w-6" strokeWidth={2.5} />
+            <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden fill="none">
+              <path d="M6 14l6-6 6 6" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
             <span className="sr-only">Scroll to top</span>
           </motion.button>
         )}

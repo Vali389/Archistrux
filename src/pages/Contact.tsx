@@ -1,12 +1,38 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin, Clock, Send, MessageCircle } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import emailjs from "@emailjs/browser";
+import { Phone, Mail, MapPin, Clock, Send, MessageCircle, Loader2 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
+import { Label } from "@/components/ui/label";
 import heroContact from "@/assets/hero-contact.jpg";
 import { useToast } from "@/hooks/use-toast";
 import { COMPANY, whatsappHref } from "@/data/company";
+import { EMAILJS_PUBLIC_KEY, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID } from "@/config/emailjs";
+import { cn } from "@/lib/utils";
+
+const contactFormSchema = z.object({
+  name: z.string().trim().min(2, "Name must be at least 2 characters").max(120),
+  email: z.string().trim().email("Enter a valid email address"),
+  phone: z
+    .string()
+    .trim()
+    .superRefine((val, ctx) => {
+      if (!val) return;
+      const digits = val.replace(/\D/g, "");
+      if (digits.length < 10) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Phone must include at least 10 digits" });
+      }
+    }),
+  subject: z.string().trim().min(3, "Subject must be at least 3 characters").max(200),
+  message: z.string().trim().min(10, "Message must be at least 10 characters").max(5000),
+});
+
+type ContactFormValues = z.infer<typeof contactFormSchema>;
 
 const contactInfo = [
   { icon: Phone, title: "Phone", details: [COMPANY.phoneDisplay], href: `tel:${COMPANY.phoneTel}` },
@@ -22,14 +48,97 @@ const contactInfo = [
 const mapEmbedUrl =
   "https://maps.google.com/maps?q=Manikonda,+Hyderabad,+Telangana&z=12&output=embed";
 
+const inputClass =
+  "w-full bg-input border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground font-body text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 transition-colors";
+
 const Contact = () => {
   const { toast } = useToast();
-  const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast({ title: "Message sent!", description: "We'll get back to you within 24 hours." });
-    setForm({ name: "", email: "", phone: "", subject: "", message: "" });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ContactFormValues>({
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      subject: "",
+      message: "",
+    },
+  });
+
+  const onSubmit = async (data: ContactFormValues) => {
+    setSubmitError(null);
+    if (!EMAILJS_PUBLIC_KEY || !EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID) {
+      toast({
+        variant: "destructive",
+        title: "Email not configured",
+        description:
+          "Create a .env file in the project root with VITE_EMAILJS_PUBLIC_KEY, VITE_EMAILJS_SERVICE_ID, and VITE_EMAILJS_TEMPLATE_ID from dashboard.emailjs.com (see .env.example). Restart the dev server after saving.",
+      });
+      return;
+    }
+
+    try {
+      const phoneDisplay = data.phone.trim() || "Not provided";
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        {
+          // Sidebar / subject
+          name: data.name,
+          email: data.email,
+          title: data.subject,
+          // Body (same values — use these names in your EmailJS HTML template)
+          from_name: data.name,
+          from_email: data.email,
+          reply_to: data.email,
+          phone: phoneDisplay,
+          subject: data.subject,
+          message: data.message,
+          // Aliases some EmailJS default templates expect
+          user_name: data.name,
+          user_email: data.email,
+          user_phone: phoneDisplay,
+          user_message: data.message,
+          text: data.message,
+        },
+        { publicKey: EMAILJS_PUBLIC_KEY },
+      );
+      toast({
+        title: "Message sent",
+        description: "We'll get back to you as soon as we can.",
+      });
+      reset();
+    } catch (err: unknown) {
+      const raw =
+        err && typeof err === "object" && "text" in err && typeof (err as { text?: string }).text === "string"
+          ? (err as { text: string }).text
+          : "";
+      let msg = raw || "Something went wrong. Please try again or call us directly.";
+      if (/service id not found/i.test(raw)) {
+        msg =
+          "Your EmailJS Service ID does not match this account. Open .env and set VITE_EMAILJS_SERVICE_ID to the ID shown under EmailJS → Email Services (it looks like service_abc123). Save the file, restart the dev server, and try again.";
+      }
+      if (/template id not found/i.test(raw)) {
+        msg =
+          "Your EmailJS Template ID does not match. In .env set VITE_EMAILJS_TEMPLATE_ID from EmailJS → Email Templates, then restart the dev server.";
+      }
+      if (/public key is invalid|invalid public key/i.test(raw)) {
+        msg =
+          "EmailJS public key is wrong. In .env set VITE_EMAILJS_PUBLIC_KEY from EmailJS → Account → API keys, then restart the dev server.";
+      }
+      setSubmitError(msg);
+      toast({
+        variant: "destructive",
+        title: "Could not send message",
+        description: msg,
+      });
+    }
   };
 
   return (
@@ -39,7 +148,7 @@ const Contact = () => {
       <HeroSection
         image={heroContact}
         title="Get in touch"
-        subtitle={`Call ${COMPANY.phoneDisplay}, email ${COMPANY.email}, or WhatsApp us. Office: ${COMPANY.address}.`}
+        subtitle="Share your project scope and questions—we’ll get back to you with clear next steps."
         highlight="Contact"
       />
 
@@ -109,54 +218,105 @@ const Contact = () => {
                 slot.
               </p>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <input
-                    type="text"
-                    placeholder="Your name"
-                    required
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className="bg-input border border-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground font-body text-sm focus:outline-none focus:border-primary transition-colors"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Your email"
-                    required
-                    value={form.email}
-                    onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    className="bg-input border border-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground font-body text-sm focus:outline-none focus:border-primary transition-colors"
-                  />
+                  <div className="space-y-2">
+                    <Label htmlFor="contact-name">Name</Label>
+                    <input
+                      id="contact-name"
+                      type="text"
+                      autoComplete="name"
+                      aria-invalid={errors.name ? "true" : "false"}
+                      className={cn(inputClass, "border-border", errors.name && "border-destructive focus:ring-destructive/30")}
+                      placeholder="Your name"
+                      {...register("name")}
+                    />
+                    {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="contact-email">Email</Label>
+                    <input
+                      id="contact-email"
+                      type="email"
+                      autoComplete="email"
+                      aria-invalid={errors.email ? "true" : "false"}
+                      className={cn(inputClass, "border-border", errors.email && "border-destructive focus:ring-destructive/30")}
+                      placeholder="Your email"
+                      {...register("email")}
+                    />
+                    {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+                  </div>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <input
-                    type="tel"
-                    placeholder="Phone number"
-                    value={form.phone}
-                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    className="bg-input border border-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground font-body text-sm focus:outline-none focus:border-primary transition-colors"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Subject"
-                    value={form.subject}
-                    onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                    className="bg-input border border-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground font-body text-sm focus:outline-none focus:border-primary transition-colors"
-                  />
+                  <div className="space-y-2">
+                    <Label htmlFor="contact-phone">Phone (optional)</Label>
+                    <input
+                      id="contact-phone"
+                      type="tel"
+                      autoComplete="tel"
+                      aria-invalid={errors.phone ? "true" : "false"}
+                      className={cn(inputClass, "border-border", errors.phone && "border-destructive focus:ring-destructive/30")}
+                      placeholder="Phone number"
+                      {...register("phone")}
+                    />
+                    {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="contact-subject">Subject</Label>
+                    <input
+                      id="contact-subject"
+                      type="text"
+                      autoComplete="off"
+                      aria-invalid={errors.subject ? "true" : "false"}
+                      className={cn(
+                        inputClass,
+                        "border-border",
+                        errors.subject && "border-destructive focus:ring-destructive/30",
+                      )}
+                      placeholder="Subject"
+                      {...register("subject")}
+                    />
+                    {errors.subject && <p className="text-sm text-destructive">{errors.subject.message}</p>}
+                  </div>
                 </div>
-                <textarea
-                  placeholder="Tell us about your project..."
-                  required
-                  rows={5}
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  className="w-full bg-input border border-border rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground font-body text-sm focus:outline-none focus:border-primary transition-colors resize-none"
-                />
+                <div className="space-y-2">
+                  <Label htmlFor="contact-message">Message</Label>
+                  <textarea
+                    id="contact-message"
+                    rows={5}
+                    aria-invalid={errors.message ? "true" : "false"}
+                    className={cn(
+                      inputClass,
+                      "border-border resize-none",
+                      errors.message && "border-destructive focus:ring-destructive/30",
+                    )}
+                    placeholder="Tell us about your project..."
+                    {...register("message")}
+                  />
+                  {errors.message && <p className="text-sm text-destructive">{errors.message.message}</p>}
+                </div>
+
+                {submitError && (
+                  <p className="text-sm text-destructive" role="alert">
+                    {submitError}
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2 bg-gold-gradient text-primary-foreground font-body text-sm tracking-wider uppercase px-8 py-4 rounded-lg hover:opacity-90 transition-opacity"
+                  disabled={isSubmitting}
+                  className="inline-flex items-center justify-center gap-2 min-w-[200px] bg-gold-gradient text-primary-foreground font-body text-sm tracking-wider uppercase px-8 py-4 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-60 disabled:pointer-events-none"
                 >
-                  Send message <Send size={16} />
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                      Sending…
+                    </>
+                  ) : (
+                    <>
+                      Send message <Send size={16} />
+                    </>
+                  )}
                 </button>
               </form>
             </motion.div>

@@ -78,7 +78,8 @@ export const FAQ = () =>
     <>
       <p>
         <strong className="text-foreground">What services do you provide?</strong> Interior designing, project management,
-        design & drafting, material testing, and property valuation—plus integrated coordination across these workstreams.
+        design & drafting, Revit &amp; BIM modeling, material testing, and property valuation—plus integrated coordination
+        across these workstreams.
       </p>
       <p>
         <strong className="text-foreground">Do you work outside Hyderabad?</strong> Yes, depending on scope and resource
@@ -128,6 +129,11 @@ export const SiteMapPage = () =>
             <li>
               <Link className="text-primary hover:underline" to="/services/design-drafting">
                 Design & drafting
+              </Link>
+            </li>
+            <li>
+              <Link className="text-primary hover:underline" to="/services/revit">
+                Revit &amp; BIM modeling
               </Link>
             </li>
             <li>

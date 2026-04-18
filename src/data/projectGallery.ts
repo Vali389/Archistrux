@@ -51,13 +51,26 @@ function extractSortKey(filename: string): number {
   return 200000 + (h >>> 0);
 }
 
+/** Service marketing photos (used on `/services/*` via `serviceAssetImages.ts`) — keep out of the portfolio grid */
+function isServiceStockPhoto(filename: string): boolean {
+  const lower = filename.toLowerCase();
+  if (/^design and drafting-/i.test(filename)) return true;
+  if (filename.startsWith("project-mangement-")) return true;
+  if (filename.startsWith("property-evalution-")) return true;
+  if (filename.startsWith("materil-testing-") || filename.startsWith("materuil-testing-")) return true;
+  if (filename.startsWith("revit-")) return true;
+  if (lower.includes("whatsapp image")) return true;
+  return false;
+}
+
 function loadSortedImages(): GalleryImage[] {
   const modules = import.meta.glob("../assets/*.jpeg", { eager: true }) as Record<string, { default: string }>;
   const list: GalleryImage[] = [];
 
   for (const [path, mod] of Object.entries(modules)) {
-    const filename = path.split("/").pop() ?? path;
+    const filename = path.replace(/\\/g, "/").split("/").pop() ?? path;
     if (filename.toLowerCase().includes("logo")) continue;
+    if (isServiceStockPhoto(filename)) continue;
     list.push({
       src: mod.default,
       id: filename.replace(/\.jpe?g$/i, ""),

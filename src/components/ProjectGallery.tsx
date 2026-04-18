@@ -62,7 +62,7 @@ export const GroupedProjectGallery = ({ className }: ProjectGalleryProps) => {
             <div className="w-16 h-0.5 bg-gold-gradient mt-5" />
           </motion.div>
 
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {group.images.map((img, ii) => (
               <GalleryTile key={`${group.id}-${img.id}-${ii}`} image={img} index={gi * 100 + ii} onOpen={() => openAt(img)} />
             ))}
@@ -139,13 +139,13 @@ function GalleryTile({
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.99 }}
       onClick={onOpen}
-      className="group relative mb-4 w-full break-inside-avoid overflow-hidden rounded-xl border border-border/80 bg-card focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      className="group relative w-full aspect-square overflow-hidden rounded-xl border border-border/80 bg-card focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
     >
       <img
         src={image.src}
         alt=""
         loading="lazy"
-        className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
       />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       <span className="pointer-events-none absolute bottom-3 left-3 text-[10px] uppercase tracking-widest text-primary font-semibold opacity-0 group-hover:opacity-100 transition-opacity">

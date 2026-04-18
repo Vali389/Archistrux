@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import heroServices from "@/assets/hero-services.jpg";
 import { COMPANY, whatsappHref } from "@/data/company";
 import { servicesList } from "@/data/servicesContent";
+import { getServiceAssetImages } from "@/data/serviceAssetImages";
 
 const processIcons = [MessageCircle, FileText, Wrench, ClipboardList];
 
@@ -38,6 +39,7 @@ const Services = () => {
         {servicesList.map((service, index) => {
           const Icon = service.icon;
           const imageLeft = index % 2 === 0;
+          const heroSrc = getServiceAssetImages(service.slug).hero;
           return (
             <motion.article
               key={service.slug}
@@ -51,7 +53,7 @@ const Services = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden rounded-2xl border border-border/80 bg-card/40 shadow-xl shadow-black/15">
                   <div className={cn("relative min-h-[260px] lg:min-h-[380px]", !imageLeft && "lg:order-2")}>
                     <img
-                      src={service.heroImage}
+                      src={heroSrc}
                       alt=""
                       className="absolute inset-0 h-full w-full object-cover"
                     />
