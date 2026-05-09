@@ -151,7 +151,7 @@ const About = () => {
                       "Project Management",
                       "Design & Drafting",
                       "Revit & BIM Modeling",
-                      "Material Testing",
+                      "Laboratory (NABL) · material testing",
                       "Property Valuation",
                     ].map((item) => (
                       <li key={item} className="flex gap-2">

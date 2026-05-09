@@ -78,6 +78,13 @@
   }
 }
 
+/* Sharper hero backgrounds while Framer Motion scales (reduces softening in some browsers). */
+.hero-bg-motion {
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
 @layer utilities {
   .text-gold-gradient {
     background: linear-gradient(135deg, hsl(43 80% 70%), hsl(43 72% 55%), hsl(43 60% 40%));

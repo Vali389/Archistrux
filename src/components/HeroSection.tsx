@@ -12,14 +12,15 @@ interface HeroSectionProps {
 const HeroSection = ({ image, title, subtitle, highlight, tagline }: HeroSectionProps) => {
   return (
     <section className="relative h-screen w-full overflow-hidden">
-      <div className="absolute inset-0">
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover"
-          width={1920}
-          height={1080}
-        />
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div
+          className="hero-bg-motion absolute inset-0"
+          style={{ transformOrigin: "center center" }}
+          animate={{ scale: [1, 1.03, 1] }}
+          transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <img src={image} alt={title} className="h-full w-full object-cover object-center" width={2400} height={1350} />
+        </motion.div>
         <div className="absolute inset-0 bg-background/70" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
       </div>

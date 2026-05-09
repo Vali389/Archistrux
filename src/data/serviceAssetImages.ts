@@ -3,7 +3,6 @@
  */
 import type { ServiceSlug } from "./servicesContent";
 
-import interiorHero from "@/assets/-1.jpeg";
 import interiorG1 from "@/assets/-2.jpeg";
 import interiorG2 from "@/assets/-4.jpeg";
 import interiorG3 from "@/assets/-5.jpeg";
@@ -35,7 +34,7 @@ import valG3 from "@/assets/property-evalution-4.jpeg";
 
 export const SERVICE_ASSET_IMAGES: Record<ServiceSlug, { hero: string; gallery: [string, string, string] }> = {
   "interior-designing": {
-    hero: interiorHero,
+    hero: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2560&q=90",
     gallery: [interiorG1, interiorG2, interiorG3],
   },
   "project-management": {

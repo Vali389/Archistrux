@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, Navigate, useParams } from "react-router-dom";
-import { ArrowRight, Check, ChevronRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { COMPANY, whatsappHref } from "@/data/company";
@@ -36,6 +36,11 @@ const ServiceDetail = () => {
   }
 
   const related = servicesList.filter((s) => s.slug !== service.slug).slice(0, 3);
+  const scopeOffersChecklist = service.scopeOffersChecklist === true;
+  const stackedProcessDesc = service.processStepDescriptions;
+  const compactProcessCards = service.slug === "interior-designing" && Boolean(stackedProcessDesc);
+  const labScopeGoldCards = service.slug === "material-testing";
+  const scopeCards = service.scopeDeliverablesCards ?? service.whatWeOffer;
 
   return (
     <div className="min-h-screen bg-background">
@@ -63,15 +68,24 @@ const ServiceDetail = () => {
       </nav>
 
       <section className="relative min-h-[min(52vh,520px)] w-full overflow-hidden">
-        <img
-          src={heroImage}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-          width={2000}
-          height={1200}
-          fetchPriority="high"
-          decoding="async"
-        />
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div
+            className="hero-bg-motion absolute inset-0"
+            style={{ transformOrigin: "center center" }}
+            animate={{ scale: [1, 1.03, 1] }}
+            transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <img
+              src={heroImage}
+              alt=""
+              className="h-full w-full object-cover object-center"
+              width={2400}
+              height={1600}
+              fetchPriority="high"
+              decoding="async"
+            />
+          </motion.div>
+        </div>
         <div className="absolute inset-0 bg-black/55" />
         <div className="relative z-10 flex min-h-[min(52vh,520px)] flex-col items-center justify-center px-4 py-16 text-center">
           <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
@@ -83,90 +97,136 @@ const ServiceDetail = () => {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-4 py-14 md:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="font-display text-2xl md:text-[1.65rem] font-bold text-foreground tracking-tight mb-2">
-              About this service
-            </h2>
-            <div className="w-16 h-0.5 bg-gold-gradient mb-6" />
-            <p className="text-base md:text-[17px] leading-[1.75] text-foreground/90 mb-4">{service.description}</p>
-            {service.additionalContent.map((para, idx) => (
-              <p key={idx} className="text-base md:text-[17px] leading-[1.75] text-foreground/80 mb-4 last:mb-6">
-                {para}
-              </p>
-            ))}
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">Key features</p>
-            <ul className="space-y-2.5">
-              {service.whatWeOffer.map((item) => (
-                <li key={item.title} className="flex items-start gap-2.5 text-foreground/90 text-sm md:text-base">
-                  <Check className="h-5 w-5 shrink-0 text-primary mt-0.5" strokeWidth={2.5} />
-                  <span>{item.title}</span>
-                </li>
+      {!service.hideAboutSplit && (
+        <section className="max-w-7xl mx-auto px-4 py-14 md:py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="font-display text-2xl md:text-[1.65rem] font-bold text-foreground tracking-tight mb-2">
+                About this service
+              </h2>
+              <div className="w-16 h-0.5 bg-gold-gradient mb-6" />
+              <p className="text-base md:text-[17px] leading-[1.75] text-foreground/90 mb-4">{service.description}</p>
+              {service.additionalContent.map((para, idx) => (
+                <p key={idx} className="text-base md:text-[17px] leading-[1.75] text-foreground/80 mb-4 last:mb-6">
+                  {para}
+                </p>
               ))}
-            </ul>
-          </motion.div>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary mb-3">Key features</p>
+              <ul className="space-y-2.5">
+                {service.whatWeOffer.map((item) => (
+                  <li key={item.title} className="flex items-start gap-2.5 text-foreground/90 text-sm md:text-base">
+                    <Check className="h-5 w-5 shrink-0 text-primary mt-0.5" strokeWidth={2.5} />
+                    <span>{item.title}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="space-y-4"
-          >
-            <div className="relative overflow-hidden rounded-xl border border-border/80 aspect-[4/3] bg-secondary shadow-lg">
-              <img
-                src={mainGallerySrc}
-                alt={`${service.title} — project visual`}
-                className="h-full w-full object-cover transition-opacity duration-300"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <div className="grid grid-cols-4 gap-2 md:gap-3">
-              {thumbs.map((src, i) => (
-                <button
-                  key={`${service.slug}-thumb-${i}`}
-                  type="button"
-                  onClick={() => setGalleryIdx(i)}
-                  className={`relative aspect-[4/3] overflow-hidden rounded-lg border-2 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                    galleryIdx === i ? "border-primary ring-2 ring-primary/30" : "border-transparent opacity-80 hover:opacity-100"
-                  }`}
-                  aria-label={`View image ${i + 1}`}
-                >
-                  <img src={src} alt="" className="h-full w-full object-cover" loading="lazy" />
-                </button>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="space-y-4"
+            >
+              <div className="relative overflow-hidden rounded-xl border border-border/80 aspect-[4/3] bg-secondary shadow-lg">
+                <img
+                  src={mainGallerySrc}
+                  alt={`${service.title} — project visual`}
+                  className="h-full w-full object-cover transition-opacity duration-300"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div className="grid grid-cols-4 gap-2 md:gap-3">
+                {thumbs.map((src, i) => (
+                  <button
+                    key={`${service.slug}-thumb-${i}`}
+                    type="button"
+                    onClick={() => setGalleryIdx(i)}
+                    className={`relative aspect-[4/3] overflow-hidden rounded-lg border-2 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                      galleryIdx === i ? "border-primary ring-2 ring-primary/30" : "border-transparent opacity-80 hover:opacity-100"
+                    }`}
+                    aria-label={`View image ${i + 1}`}
+                  >
+                    <img src={src} alt="" className="h-full w-full object-cover" loading="lazy" />
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       <div className="bg-secondary/40 border-y border-border/60 py-14 md:py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <h2 className="text-2xl md:text-[1.75rem] font-bold text-foreground tracking-tight mb-2">Scope & deliverables</h2>
-            <p className="text-muted-foreground text-base md:text-[17px] leading-relaxed">
-              What you can expect when you engage us for this service.
-            </p>
-            <div className="w-16 h-0.5 bg-gold-gradient mx-auto mt-5" />
+          <div
+            className={`text-center mx-auto mb-10 ${
+              labScopeGoldCards || service.scopeSectionTitle || service.scopeDeliverablesIntro ? "max-w-3xl" : "max-w-2xl"
+            }`}
+          >
+            {!service.hideScopeDeliverablesLabel ? (
+              <>
+                <h2 className="text-2xl md:text-[1.75rem] font-bold text-foreground tracking-tight mb-3">
+                  Scope & deliverables
+                </h2>
+                <div className="w-16 h-0.5 bg-gold-gradient mx-auto mb-5" />
+              </>
+            ) : null}
+            {service.scopeSectionTitle ? (
+              <div className="text-left sm:text-center space-y-3">
+                <p className="font-display text-xl md:text-2xl font-bold text-foreground tracking-tight">{service.scopeSectionTitle}</p>
+                {service.scopeSectionSubtitle ? (
+                  <p className="text-primary font-semibold text-base md:text-lg">{service.scopeSectionSubtitle}</p>
+                ) : null}
+                {service.scopeDeliverablesIntro ? (
+                  <p className="text-muted-foreground text-base md:text-[17px] leading-relaxed max-w-3xl sm:mx-auto">
+                    {service.scopeDeliverablesIntro}
+                  </p>
+                ) : null}
+              </div>
+            ) : (
+              <p className="text-muted-foreground text-base md:text-[17px] leading-relaxed">
+                {service.scopeDeliverablesIntro ?? "What you can expect when you engage us for this service."}
+              </p>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
-            {service.whatWeOffer.map((item, i) => (
+            {scopeCards.map((item, i) => (
               <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 14 }}
+                key={`${item.title}-${i}`}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
-                className="rounded-xl border border-border bg-card/90 p-6 md:p-7 shadow-md hover:border-primary/30 transition-colors"
+                viewport={{ once: true, margin: "-24px" }}
+                transition={{ delay: i * 0.06, duration: 0.45, ease: "easeOut" }}
+                className={`rounded-xl border p-6 md:p-7 transition-colors ${
+                  labScopeGoldCards
+                    ? "bg-card border-primary/40 shadow-md shadow-black/20 hover:border-primary/70"
+                    : scopeOffersChecklist
+                      ? "bg-card border-border/80 shadow-md hover:border-primary/45"
+                      : "bg-card/90 border-border shadow-md hover:border-primary/30"
+                }`}
               >
-                <h3 className="font-display text-base md:text-lg font-bold text-foreground tracking-tight mb-2">{item.title}</h3>
-                <p className="text-muted-foreground text-sm md:text-[15px] leading-relaxed">{item.description}</p>
+                {scopeOffersChecklist ? (
+                  <div className="flex items-start gap-3.5">
+                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-primary/50 text-primary">
+                      <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                    </span>
+                    <div>
+                      <h3 className="font-display text-base md:text-lg font-bold text-foreground tracking-tight mb-2">{item.title}</h3>
+                      <p className="text-muted-foreground text-sm md:text-[15px] leading-relaxed">{item.description}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <h3 className="font-display text-base md:text-lg font-bold text-foreground tracking-tight mb-2">{item.title}</h3>
+                    <p className="text-muted-foreground text-sm md:text-[15px] leading-relaxed">{item.description}</p>
+                  </>
+                )}
               </motion.div>
             ))}
           </div>
@@ -175,32 +235,87 @@ const ServiceDetail = () => {
 
       <div className="max-w-7xl mx-auto px-4 py-14 md:py-16">
         <div className="text-center mb-10 md:mb-14">
-          <h2 className="text-xl md:text-2xl font-bold text-foreground tracking-tight uppercase tracking-[0.12em]">
+          <h2
+            className={`font-bold text-foreground tracking-tight uppercase tracking-[0.12em] ${
+              compactProcessCards ? "text-lg md:text-xl" : "text-xl md:text-2xl"
+            }`}
+          >
             Our process
           </h2>
           <div className="w-16 h-0.5 bg-gold-gradient mx-auto mt-4" />
         </div>
 
         <div className="relative">
-          <div className="hidden md:block absolute left-[8%] right-[8%] top-[22px] h-0.5 bg-primary/35 pointer-events-none" aria-hidden />
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-4">
+          {!stackedProcessDesc && (
+            <div className="hidden md:block absolute left-[8%] right-[8%] top-[22px] h-0.5 bg-primary/35 pointer-events-none" aria-hidden />
+          )}
+          <div className={`${stackedProcessDesc ? "grid grid-cols-1 gap-5" : "grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-4"}`}>
             {service.processSteps.map((step, i) => (
               <motion.div
                 key={step}
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 26 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.06 }}
-                className="relative flex flex-col items-center text-center"
+                transition={{ delay: i * 0.08, duration: 0.45, ease: "easeOut" }}
+                className={`relative ${
+                  stackedProcessDesc
+                    ? "rounded-2xl border border-border bg-card/90 px-6 py-5 md:px-7 md:py-6 shadow-sm"
+                    : "flex flex-col items-center text-center"
+                }`}
               >
-                <span className="relative z-10 mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-primary/20 text-primary text-lg font-bold font-display ring-2 ring-primary/35">
-                  {i + 1}
-                </span>
-                <p className="font-semibold text-foreground text-sm md:text-[15px] leading-snug px-1">{step}</p>
+                {stackedProcessDesc ? (
+                  <div className="flex items-center gap-3.5 sm:gap-4 text-left">
+                    <span
+                      className={`flex shrink-0 items-center justify-center rounded-2xl bg-primary/15 text-primary font-bold font-display ring-1 ring-primary/35 ${
+                        compactProcessCards
+                          ? "h-11 w-11 text-lg sm:h-12 sm:w-12 sm:text-xl"
+                          : "h-14 w-14 text-2xl"
+                      }`}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <div>
+                      <p
+                        className={`font-display font-bold text-foreground leading-tight mb-1.5 ${
+                          compactProcessCards
+                            ? "text-lg sm:text-xl md:text-[1.35rem]"
+                            : "text-xl sm:text-2xl md:text-[1.95rem]"
+                        }`}
+                      >
+                        {step}
+                      </p>
+                      <p
+                        className={`text-muted-foreground leading-snug ${
+                          compactProcessCards ? "text-sm md:text-[15px]" : "text-base md:text-lg"
+                        }`}
+                      >
+                        {stackedProcessDesc[i]}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <span className="relative z-10 mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-primary/20 text-primary text-lg font-bold font-display ring-2 ring-primary/35">
+                      {i + 1}
+                    </span>
+                    <p className="font-semibold text-foreground text-sm md:text-[15px] leading-snug px-1">{step}</p>
+                  </>
+                )}
               </motion.div>
             ))}
           </div>
         </div>
+        {service.slug === "interior-designing" && (
+          <div className="mt-12 text-center">
+            <Link
+              to="/services/interior-designing/stages"
+              className="inline-flex items-center gap-2 rounded-xl bg-gold-gradient px-8 py-4 text-sm font-semibold uppercase tracking-wider text-primary-foreground shadow-lg hover:opacity-95 transition-opacity"
+            >
+              View Our Detailed 15 Stages of Work
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        )}
       </div>
 
       <div className="bg-gradient-to-r from-amber-200/90 via-amber-100 to-amber-200/90 border-y border-amber-300/50 py-10 md:py-12">

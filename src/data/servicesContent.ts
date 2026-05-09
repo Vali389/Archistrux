@@ -23,6 +23,20 @@ export interface ServiceDefinition {
   /** Deeper editorial copy for detail pages (methodology, outcomes, industry context) */
   additionalContent: [string, string];
   whatWeOffer: OfferCard[];
+  /** Optional lead under “Scope & deliverables” heading (e.g. accreditation summary). */
+  scopeDeliverablesIntro?: string;
+  /** Optional heading override for the scope section. */
+  scopeSectionTitle?: string;
+  /** Optional subtitle override for the scope section. */
+  scopeSectionSubtitle?: string;
+  /**
+   * Optional cards shown only in “Scope & deliverables” (About / key features still use `whatWeOffer`).
+   */
+  scopeDeliverablesCards?: OfferCard[];
+  /** Hide the fixed “Scope & deliverables” h2 + rule (still show optional scope titles/cards below). */
+  hideScopeDeliverablesLabel?: boolean;
+  /** When true, Scope & deliverables renders checklist-style rows (primary check icon). */
+  scopeOffersChecklist?: boolean;
   whyItMatters: string;
   heroImage: string;
   /** Extra visuals for the detail page (full-width strip + cards) */
@@ -30,8 +44,15 @@ export interface ServiceDefinition {
   icon: LucideIcon;
   /** Five steps for the “Our process” timeline on service detail */
   processSteps: [string, string, string, string, string];
+  /**
+   * When set, detail page shows stacked cards with subtitles (fade-up) instead of the horizontal timeline.
+   * Strings align 1:1 with `processSteps`.
+   */
+  processStepDescriptions?: readonly [string, string, string, string, string];
   /** Quick highlights shown on the detail page */
   atAGlance: [string, string, string];
+  /** Omit the “About this service” + gallery split — lead straight into Scope (e.g. lab page). */
+  hideAboutSplit?: boolean;
 }
 
 /** Shown on home — 4 most requested services */
@@ -49,46 +70,87 @@ export const servicesList: ServiceDefinition[] = [
     summary: "Aesthetic, functional interiors tailored to your lifestyle and budget.",
     tagline: "Designing Spaces That Reflect Your Lifestyle",
     description:
-      "We create interiors that are both aesthetically appealing and highly functional. Our designs are tailored to your preferences, space, and budget while ensuring comfort, efficiency, and modern appeal.",
+      "We create interiors that are appealing, practical, and aligned to how you live or work — balancing aesthetics, ergonomics, and budget with a clear deliverables roadmap.",
     additionalContent: [
-      "Across residential and commercial projects, we align interior architecture with services routing, storage demand, and future flexibility—so spaces stay relevant as families and businesses evolve. Our process blends mood boards, material schedules, and site measurements to reduce rework during execution.",
-      "We coordinate with civil, electrical, and HVAC interfaces early, avoiding clashes that typically surface only after false ceilings or flooring are fixed. The outcome is a cohesive interior language—finishes, hardware, and lighting working together—delivered with documented sign-offs at every milestone.",
+      "Across residential and commercial projects we align zoning, circulation, lighting, materials, and services interfaces early — so approvals, procurement, and site execution stay coordinated and rework stays minimal.",
+      "You receive documented milestones — concepts, finalized drawings, selections, and site sign-offs — so decisions are traceable from design intent through handover.",
+    ],
+    hideScopeDeliverablesLabel: true,
+    scopeSectionTitle: "Laboratory (NABL)",
+    scopeSectionSubtitle: "NABL-accredited material & environmental testing",
+    scopeDeliverablesIntro:
+      "Our NABL-accredited laboratory supports infrastructure and real-estate projects with reliable material, geotechnical, and environmental testing — backed by trained chemists and calibrated instrumentation.",
+    scopeOffersChecklist: true,
+    scopeDeliverablesCards: [
+      {
+        title: "Material Testing (Concrete, Steel, Soil)",
+        description: "Strength, conformity, and quality checks for structural and pavement inputs aligned to prescribed codes and specifications.",
+      },
+      {
+        title: "Geotechnical Investigations",
+        description: "Field and lab studies to characterize subsurface behaviour and support safe foundation recommendations.",
+      },
+      {
+        title: "Environmental Testing (Water, Soil)",
+        description: "Chemical and physical parameters assessed for occupational, environmental, compliance, and risk mitigation needs.",
+      },
+      {
+        title: "Quality Control & Compliance",
+        description: "Documented QA/QC checkpoints, calibration traceability hooks, audit-friendly records, milestone reporting.",
+      },
+      {
+        title: "Non-Destructive Testing (NDT)",
+        description: "In-situ evaluations of concrete and steel continuity without sacrificing structural continuity during inspection cycles.",
+      },
+      {
+        title: "Mix Design & Cube Testing",
+        description: "Performance-oriented mix optimisation plus cube strength regimes for predictable durability envelopes.",
+      },
     ],
     whatWeOffer: [
       {
-        title: "Space planning & layout optimization",
-        description: "Zoning, circulation, and furniture layouts that make everyday movement effortless.",
+        title: "Discovery & spatial planning",
+        description: "Site assessment, zoning, circulation, storage, and layouts tuned to occupancy and ergonomics.",
       },
       {
-        title: "Furniture and decor selection",
-        description: "Curated pieces, finishes, and palettes aligned to your taste and maintenance needs.",
+        title: "Concepts & material direction",
+        description: "Mood, palette, finishes, and hardware coordination aligned with maintenance expectations.",
       },
       {
-        title: "Lighting and color concepts",
-        description: "Layered lighting plans and color direction for mood, productivity, and longevity.",
+        title: "Detailed drawings & documentation",
+        description: "Joinery elevations, specs, schedules, and GFC-aligned packages for approvals and quoting.",
       },
       {
-        title: "3D design visualization",
-        description: "Realistic views so you can approve details before procurement and execution.",
+        title: "Visualization & stakeholder sign-off",
+        description: "3D views where needed so approvals happen before buys and fabrication.",
+      },
+      {
+        title: "Procurement coordination",
+        description: "BOQ-aligned selections, comparisons, vendor alignment, and sample validation.",
+      },
+      {
+        title: "Supervision until handover",
+        description: "Site visits, snag lists, quality checkpoints, documentation, and final finish close-out.",
       },
     ],
     whyItMatters:
-      "A well-designed space enhances your lifestyle, improves functionality, and increases the overall value of your property.",
-    heroImage: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=80",
+      "A coherent interior lifts daily comfort, reinforces brand for commercial spaces, and protects asset value.",
+    heroImage: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2400&q=85",
     galleryImages: [
       "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
     ],
     icon: Palette,
-    processSteps: [
-      "Consultation",
-      "Concept design",
-      "3D visualization",
-      "Execution",
-      "Handover",
+    processSteps: ["Consultation & brief", "Concept design", "Drawings & materials", "Execution support", "Handover"],
+    processStepDescriptions: [
+      "We align goals, budgets, timelines, constraints, approvals path, stakeholder roles — and baseline measurements for planning.",
+      "Narrow to decision-ready palettes, furnishings, layering of light — with samples and reviews before detailing.",
+      "GFC-aligned plans, elevations, joinery details, specs, schedules, and coordination inputs for quotations and approvals.",
+      "Structured site rhythm: mock-ups, snag tracking, substitutions documentation, QA checkpoints aligned to drawings.",
+      "Documentation pack, snag closure walkthroughs, warranties, and training so the space is ready to operate.",
     ],
-    atAGlance: ["Lifestyle-led mood & materials", "3D sign-off before buy", "Site-aligned execution"],
+    atAGlance: ["Deliverables mapped to milestones", "Selections before buys", "Documented approvals"],
   },
   {
     slug: "project-management",
@@ -223,44 +285,63 @@ export const servicesList: ServiceDefinition[] = [
   },
   {
     slug: "material-testing",
-    title: "Material Testing",
-    summary: "Verification of strength, safety, and compliance for construction materials.",
-    tagline: "Ensuring Strength, Safety & Quality",
+    title: "Laboratory (NABL)",
+    hideAboutSplit: true,
+    summary: "NABL-accredited material & environmental testing backed by calibrated instrumentation and disciplined procedures.",
+    tagline: "NABL-accredited material & environmental testing",
     description:
-      "We conduct thorough material testing to ensure that all construction materials meet required standards for strength, durability, and safety.",
+      "Our NABL-accredited lab supports infrastructure and real-estate projects with reliable material, geotechnical and environmental testing — backed by trained chemists and calibrated instrumentation.",
     additionalContent: [
-      "Material quality directly impacts structural safety, durability, and maintenance cost. We follow structured sampling plans and reference lab/field standards so that results are comparable, repeatable, and defensible in audits or dispute scenarios.",
-      "When results deviate, we help you interpret implications—whether acceptance, conditional use, rejection, or re-test—and document the decision trail. That transparency protects your timeline and your liability profile on the project.",
+      "Sampling and testing programmes are referenced to recognised standards where applicable — so findings are repeatable, comparable across lots, and defensible during audits or dispute resolution.",
+      "When deviations occur we provide practical interpretation plus options for corrective action, re-test, substitution, or conditional use — with transparency on assumptions and uncertainty.",
     ],
+    scopeOffersChecklist: true,
+    scopeDeliverablesIntro:
+      "Our NABL-accredited laboratory supports infrastructure and real-estate projects with reliable material, geotechnical, and environmental testing — backed by trained chemists and calibrated instrumentation. Deliverables follow ISO/IEC 17025–aligned quality systems, traceable calibration, documented methods, and reports you can rely on for compliance, tenders, and audit trails.",
     whatWeOffer: [
       {
-        title: "Material strength testing",
-        description: "Structured sampling and lab-aligned checks for critical structural inputs.",
+        title: "Material Testing (Concrete, Steel, Soil)",
+        description: "Strength, conformity, and quality checks for structural and pavement inputs aligned to prescribed codes and specifications.",
       },
       {
-        title: "Quality analysis",
-        description: "Documentation of results with clear pass/fail against specified limits.",
+        title: "Geotechnical Investigations",
+        description: "Field and lab studies to characterize subsurface behaviour and support safe foundation recommendations.",
       },
       {
-        title: "Compliance with standards",
-        description: "Alignment to relevant codes and project specifications you can file with confidence.",
+        title: "Environmental Testing (Water, Soil)",
+        description: "Chemical and physical parameters assessed for occupational, environmental, compliance, and risk mitigation needs.",
       },
       {
-        title: "Performance evaluation",
-        description: "Recommendations when substitutions or re-tests are required.",
+        title: "Quality Control & Compliance",
+        description: "Documented QA/QC checkpoints, calibration traceability hooks, audit-friendly records, milestone reporting.",
+      },
+      {
+        title: "Non-Destructive Testing (NDT)",
+        description: "In-situ evaluations of concrete and steel continuity without sacrificing structural continuity during inspection cycles.",
+      },
+      {
+        title: "Mix Design & Cube Testing",
+        description: "Performance-oriented mix optimisation plus cube strength regimes for predictable durability envelopes.",
       },
     ],
     whyItMatters:
-      "Using tested and verified materials ensures long-term durability and protects your investment.",
-    heroImage: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=2000&q=80",
+      "Testing gives you repeatable evidence for compliance, lowers rework risk, and protects structural performance over the asset lifecycle.",
+    heroImage: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=2400&q=85",
     galleryImages: [
       "https://images.unsplash.com/photo-1581092160607-ee22621ddc91?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1200&q=80",
       "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?auto=format&fit=crop&w=1200&q=80",
     ],
     icon: FlaskConical,
-    processSteps: ["Test plan", "Sampling", "Lab testing & records", "Report & recommendations", "Close-out"],
-    atAGlance: ["Sampling as per spec", "Lab-aligned reporting", "Pass / fail documentation"],
+    processSteps: ["Test programme", "Sampling", "Lab testing", "Reporting", "Advisory"],
+    processStepDescriptions: [
+      "Scope, frequencies, specimen matrix, specimen conditioning windows, witnessing requirements, liaison with site QC — locked before sampling begins.",
+      "Field sampling per IS / ASTM and project supplemental specifications.",
+      "Calibrated instrumentation, disciplined chain-of-custody, repeatable analyst protocols.",
+      "NABL-aligned test certificates with clear conformance statements tied to contractual limits.",
+      "Interpretive commentary plus corrective sequencing guidance when outliers appear.",
+    ],
+    atAGlance: ["NABL-aligned reporting", "Calibrated instrumentation", "Audit-friendly records"],
   },
   {
     slug: "property-valuation",

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin } from "lucide-react";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/image.png";
 import { COMPANY } from "@/data/company";
 import { servicesList } from "@/data/servicesContent";
 import { useToast } from "@/hooks/use-toast";
@@ -25,8 +25,10 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-10 pb-12 border-b border-zinc-800/90">
           <div className="max-w-md">
-            <div className="flex flex-nowrap items-center gap-3 mb-5 min-w-0">
-              <img src={logo} alt="ArchiStrux Logo" className="h-10 w-auto shrink-0" />
+            <div className="flex flex-nowrap items-center gap-3 mb-5 min-w-0 group">
+              <div className="h-11 flex items-center justify-center shrink-0">
+                <img src={logo} alt="ArchiStrux Logo" className="h-full w-auto object-contain" />
+              </div>
               <div className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0 sm:flex-nowrap sm:items-center">
                 <span className="text-gold-gradient font-display text-lg font-bold tracking-tight whitespace-nowrap">
                   {COMPANY.shortName}
@@ -86,7 +88,7 @@ const Footer = () => {
             <p className="mt-6 text-xs font-bold uppercase tracking-[0.14em] text-zinc-500">Follow</p>
             <div className="mt-3 flex flex-wrap items-center gap-3">
               <a
-                href="https://www.facebook.com/"
+                href="https://www.facebook.com/share/1P8PUBwad3/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
@@ -97,7 +99,7 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="https://www.linkedin.com/"
+                href="https://www.linkedin.com/in/shaik-irfan-9319273b9?utm_source=share_via&utm_content=profile&utm_medium=member_android"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LinkedIn"
@@ -108,7 +110,7 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="https://www.instagram.com/"
+                href="https://www.instagram.com/archistrux.ei?utm_source=qr&igsh=MXhkNHQ4eGF4MmJrcw%3D%3D"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"

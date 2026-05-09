@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/image.png";
 
 const navLinks = [
   { name: "Home", path: "/" },
@@ -30,8 +30,10 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="ArchiStrux Logo" className="h-12 w-auto" />
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="h-12 flex items-center justify-center">
+              <img src={logo} alt="ArchiStrux Logo" className="h-full w-auto object-contain" />
+            </div>
             <div className="hidden sm:block">
               <span className="text-gold-gradient font-display text-base md:text-lg font-bold leading-tight block tracking-tight">
                 ArchiStrux

@@ -11,6 +11,8 @@ import Contact from "./pages/Contact.tsx";
 import Projects from "./pages/Projects.tsx";
 import Careers from "./pages/Careers.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import InteriorStages from "./pages/InteriorStages.tsx";
+import StageDetail from "./pages/StageDetail.tsx";
 import { PrivacyPolicy, TermsOfService, FAQ, SiteMapPage } from "./pages/LegalPages.tsx";
 import ScrollToTopOnRoute from "@/components/ScrollToTopOnRoute.tsx";
 import FloatingQuickActions from "@/components/FloatingQuickActions.tsx";
@@ -28,6 +30,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/services/interior-designing/stages" element={<InteriorStages />} />
+          <Route path="/services/interior-designing/stages/:stageSlug" element={<StageDetail />} />
           <Route path="/services/:slug" element={<ServiceDetail />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/contact" element={<Contact />} />
