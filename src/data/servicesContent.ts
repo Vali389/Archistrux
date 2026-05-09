@@ -75,38 +75,6 @@ export const servicesList: ServiceDefinition[] = [
       "Across residential and commercial projects we align zoning, circulation, lighting, materials, and services interfaces early — so approvals, procurement, and site execution stay coordinated and rework stays minimal.",
       "You receive documented milestones — concepts, finalized drawings, selections, and site sign-offs — so decisions are traceable from design intent through handover.",
     ],
-    hideScopeDeliverablesLabel: true,
-    scopeSectionTitle: "Laboratory (NABL)",
-    scopeSectionSubtitle: "NABL-accredited material & environmental testing",
-    scopeDeliverablesIntro:
-      "Our NABL-accredited laboratory supports infrastructure and real-estate projects with reliable material, geotechnical, and environmental testing — backed by trained chemists and calibrated instrumentation.",
-    scopeOffersChecklist: true,
-    scopeDeliverablesCards: [
-      {
-        title: "Material Testing (Concrete, Steel, Soil)",
-        description: "Strength, conformity, and quality checks for structural and pavement inputs aligned to prescribed codes and specifications.",
-      },
-      {
-        title: "Geotechnical Investigations",
-        description: "Field and lab studies to characterize subsurface behaviour and support safe foundation recommendations.",
-      },
-      {
-        title: "Environmental Testing (Water, Soil)",
-        description: "Chemical and physical parameters assessed for occupational, environmental, compliance, and risk mitigation needs.",
-      },
-      {
-        title: "Quality Control & Compliance",
-        description: "Documented QA/QC checkpoints, calibration traceability hooks, audit-friendly records, milestone reporting.",
-      },
-      {
-        title: "Non-Destructive Testing (NDT)",
-        description: "In-situ evaluations of concrete and steel continuity without sacrificing structural continuity during inspection cycles.",
-      },
-      {
-        title: "Mix Design & Cube Testing",
-        description: "Performance-oriented mix optimisation plus cube strength regimes for predictable durability envelopes.",
-      },
-    ],
     whatWeOffer: [
       {
         title: "Discovery & spatial planning",
@@ -287,6 +255,8 @@ export const servicesList: ServiceDefinition[] = [
     slug: "material-testing",
     title: "Laboratory (NABL)",
     hideAboutSplit: true,
+    scopeSectionTitle: "Laboratory (NABL)",
+    scopeSectionSubtitle: "NABL-accredited material & environmental testing",
     summary: "NABL-accredited material & environmental testing backed by calibrated instrumentation and disciplined procedures.",
     tagline: "NABL-accredited material & environmental testing",
     description:
